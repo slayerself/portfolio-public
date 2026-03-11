@@ -679,6 +679,43 @@
     </section>
 
     <section class="sections">
+      <article class="panel">
+        <div class="section-head">
+          <h2>Pregunta del proyecto</h2>
+          <div class="accent-line"></div>
+          <p>
+            La pregunta central fue simple: <strong>¿se puede construir un pronostico eolico operacional competitivo
+            usando solo datos abiertos?</strong>
+          </p>
+        </div>
+        <div class="story-grid">
+          <div class="story-card">
+            <span class="badge">Desafio</span>
+            <h3>Pronosticar para operar, no solo para entrenar</h3>
+            <p>
+              El problema no era obtener una metrica aislada en laboratorio, sino producir una estimacion diaria que
+              pudiera compararse en igualdad de condiciones con una referencia real del sistema.
+            </p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Restriccion</span>
+            <h3>Datos abiertos y observabilidad limitada</h3>
+            <p>
+              El proyecto se resolvio sin SCADA, sin disponibilidad de turbinas y sin viento a altura de rotor, que
+              son fuentes de informacion normalmente clave en un entorno industrial.
+            </p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Criterio de exito</span>
+            <h3>Comparacion justa con el Coordinador</h3>
+            <p>
+              La solucion debia sostenerse contra las metricas operacionales del Coordinador y bajo la misma logica de
+              emision diaria, no contra una comparacion armada a posteriori.
+            </p>
+          </div>
+        </div>
+      </article>
+
       <article class="panel" id="problema">
         <div class="section-head">
           <h2>Problema y restricciones</h2>
@@ -692,8 +729,8 @@
         <div class="facts">
           <div class="fact">
             <div class="kicker">Objetivo</div>
-            <strong><code>power_real_mw</code></strong>
-            <span>Potencia realmente inyectada a red, no una curva ideal de produccion.</span>
+            <strong>Potencia real inyectada</strong>
+            <span>Se pronostico la energia realmente entregada a red, no una curva ideal de produccion.</span>
           </div>
           <div class="fact">
             <div class="kicker">Operacion</div>
@@ -709,6 +746,43 @@
             <div class="kicker">Limitacion</div>
             <strong>Sin SCADA</strong>
             <span>Sin disponibilidad, sin viento a altura de rotor y sin estados operativos internos.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <h2>Decisiones clave del proyecto</h2>
+          <div class="accent-line"></div>
+          <p>
+            Estas definiciones marcaron el proyecto completo. Sin ellas, la comparacion final habria sido menos util y
+            potencialmente enganosa.
+          </p>
+        </div>
+        <div class="story-grid">
+          <div class="story-card">
+            <span class="badge">Operacion</span>
+            <h3>Emision fija a las 08:00</h3>
+            <p>
+              Todo el sistema se diseno para una emision diaria consistente en hora Chile, con una sola salida
+              operativa por dia.
+            </p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Horizonte</span>
+            <h3>24 horas comparables</h3>
+            <p>
+              La ventana se fijo desde las 09:00 del mismo dia hasta las 08:00 del siguiente, para que la comparacion
+              con el Coordinador fuera equivalente.
+            </p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Rigor</span>
+            <h3>Sin mezclar versiones futuras</h3>
+            <p>
+              Cada hora se evaluo con la version diaria que realmente estaba disponible al momento de emitir, evitando
+              mejoras artificiales por usar informacion mas nueva.
+            </p>
           </div>
         </div>
       </article>
@@ -1051,6 +1125,43 @@
             <span class="badge">Historial reciente</span>
             <h3>Safe lags</h3>
             <p>Valores pasados de potencia o rampa que ya estaban disponibles al momento de emitir el pronostico.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <h2>Conclusion ejecutiva</h2>
+          <div class="accent-line"></div>
+          <p>
+            El proyecto logro un sistema reproducible, comparable con operacion real y suficientemente riguroso como
+            para medir su desempeno frente a una referencia externa consolidada.
+          </p>
+        </div>
+        <div class="story-grid">
+          <div class="story-card">
+            <span class="badge">Se logro</span>
+            <h3>Un flujo operacional serio con datos abiertos</h3>
+            <p>
+              Se construyo un pronostico day-ahead completo, con correccion de viento, modelo de potencia,
+              comparacion externa y artefactos reproducibles.
+            </p>
+          </div>
+          <div class="story-card">
+            <span class="badge">No se logro</span>
+            <h3>Superar al Coordinador en la ventana comparable</h3>
+            <p>
+              La referencia externa mantuvo ventaja en las metricas principales, aun cuando el modelo propio fue
+              competitivo y metodologicamente valido.
+            </p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Siguiente salto</span>
+            <h3>Mejor observabilidad, no solo mas arquitectura</h3>
+            <p>
+              Para cerrar la brecha restante haria falta mejor informacion operacional, como SCADA, disponibilidad de
+              turbinas y viento mas representativo del rotor.
+            </p>
           </div>
         </div>
       </article>
