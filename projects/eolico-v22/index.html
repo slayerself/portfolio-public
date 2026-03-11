@@ -1015,6 +1015,43 @@
         </div>
       </article>
 
+      <article class="panel">
+        <div class="section-head">
+          <h2>Como leer las metricas</h2>
+          <div class="accent-line"></div>
+          <p>
+            Las metricas no se incluyeron como adorno. Cada una responde a una pregunta operativa distinta sobre la
+            calidad del pronostico.
+          </p>
+        </div>
+        <div class="story-grid">
+          <div class="story-card">
+            <span class="badge">MAEn</span>
+            <h3>Error medio esperado</h3>
+            <p>
+              Resume cuanto se equivoca, en promedio, el pronostico respecto a la potencia instalada. Es la metrica
+              mas directa para comparar desempeno global entre alternativas.
+            </p>
+          </div>
+          <div class="story-card">
+            <span class="badge">RMSEn</span>
+            <h3>Peso de los errores grandes</h3>
+            <p>
+              Penaliza con mas fuerza las desviaciones grandes. Sirve para detectar si el modelo falla de manera
+              especialmente severa en ciertas horas o eventos.
+            </p>
+          </div>
+          <div class="story-card">
+            <span class="badge">BIASn</span>
+            <h3>Tendencia a sobre o subestimar</h3>
+            <p>
+              Indica si el modelo tiende a quedar sistematicamente por encima o por debajo de la potencia real. Es
+              importante para distinguir error aleatorio de sesgo estructural.
+            </p>
+          </div>
+        </div>
+      </article>
+
       <div class="two-col">
         <article class="panel">
           <div class="section-head">
@@ -1125,6 +1162,43 @@
             <span class="badge">Historial reciente</span>
             <h3>Safe lags</h3>
             <p>Valores pasados de potencia o rampa que ya estaban disponibles al momento de emitir el pronostico.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <h2>Uso practico del sistema</h2>
+          <div class="accent-line"></div>
+          <p>
+            Aunque fue desarrollado como memoria y caso de estudio, el sistema ya quedo planteado en una forma que
+            sirve para evaluacion operativa y para futuras extensiones.
+          </p>
+        </div>
+        <div class="story-grid">
+          <div class="story-card">
+            <span class="badge">Programacion</span>
+            <h3>Apoyo a la estimacion diaria</h3>
+            <p>
+              Entrega una proyeccion de 24 horas con una hora fija de emision, lo que permite compararlo de forma
+              ordenada con otras referencias operativas.
+            </p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Benchmark</span>
+            <h3>Linea base con datos abiertos</h3>
+            <p>
+              Permite medir cuanto se puede lograr sin telemetria interna y deja un punto de referencia claro para
+              futuras mejoras con mejor informacion de planta.
+            </p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Escalabilidad</span>
+            <h3>Base para una version mas industrial</h3>
+            <p>
+              Si se agregan SCADA, disponibilidad o mejores variables meteorologicas, la estructura ya esta preparada
+              para absorber esa informacion sin rehacer el proyecto desde cero.
+            </p>
           </div>
         </div>
       </article>
