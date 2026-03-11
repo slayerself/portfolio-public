@@ -1020,8 +1020,8 @@
           <h2>Como leer las metricas</h2>
           <div class="accent-line"></div>
           <p>
-            Las metricas no se incluyeron como adorno. Cada una responde a una pregunta operativa distinta sobre la
-            calidad del pronostico.
+            Las metricas se seleccionaron por su relevancia operacional. Cada una responde a una pregunta distinta
+            sobre la calidad del pronostico.
           </p>
         </div>
         <div class="story-grid">
@@ -1058,8 +1058,8 @@
             <h2>Mejoras evaluadas</h2>
             <div class="accent-line"></div>
             <p>
-              Las pruebas no buscaron "probar por probar". Cada una respondio a una hipotesis concreta sobre rampas,
-              estabilidad o seleccion del submodelo de potencia.
+              Las mejoras evaluadas respondieron a hipotesis tecnicas concretas sobre rampas, estabilidad o seleccion
+              del submodelo de potencia.
             </p>
           </div>
           <div class="steps">
@@ -1074,7 +1074,7 @@
               <div class="step-number">B</div>
               <div>
                 <h3>Activacion selectiva del submodelo</h3>
-                <p>Se uso la mejora solo cuando el sistema detectaba condiciones propicias, para evitar dano colateral fuera de los casos objetivo.</p>
+                <p>Se uso la mejora solo cuando el sistema detectaba condiciones propicias, para evitar degradacion fuera de los casos objetivo.</p>
               </div>
             </div>
             <div class="step">
@@ -1089,7 +1089,7 @@
 
         <article class="panel">
           <div class="section-head">
-            <h2>Que se concluyo</h2>
+            <h2>Hallazgos principales</h2>
             <div class="accent-line"></div>
             <p>
               Las variantes nuevas mejoraron estabilidad, sesgo y algunas metricas secundarias, pero no aparecio una
@@ -1131,37 +1131,9 @@
             <img src="assets/gating_stageB_feature_importance_v22.png" alt="Importancia de variables del selector jerarquico">
             <div class="caption">
               El historial reciente disponible al emitir entro entre las variables mas influyentes del selector
-              jerarquico. Habia senal real para mejorar la eleccion del submodelo, pero no la suficiente para cerrar
+              jerarquico. Habia informacion util para mejorar la eleccion del submodelo, pero no la suficiente para cerrar
               por si sola la brecha de <code>MAEn</code>.
             </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="panel">
-        <div class="section-head">
-          <h2>Glosario rapido</h2>
-          <div class="accent-line"></div>
-          <p>
-            Esta pagina uso lenguaje mas operacional. Si quieres profundizar, estas son las equivalencias con los
-            terminos tecnicos del proyecto.
-          </p>
-        </div>
-        <div class="story-grid">
-          <div class="story-card">
-            <span class="badge">Correccion de viento</span>
-            <h3>MOS</h3>
-            <p>Postproceso estadistico para corregir el pronostico meteorologico antes de convertirlo en potencia.</p>
-          </div>
-          <div class="story-card">
-            <span class="badge">Modelo por regimenes</span>
-            <h3>MOE</h3>
-            <p>Arquitectura con un selector de regimen y varios submodelos para condiciones operativas distintas.</p>
-          </div>
-          <div class="story-card">
-            <span class="badge">Historial reciente</span>
-            <h3>Safe lags</h3>
-            <p>Valores pasados de potencia o rampa que ya estaban disponibles al momento de emitir el pronostico.</p>
           </div>
         </div>
       </article>
@@ -1205,6 +1177,34 @@
 
       <article class="panel">
         <div class="section-head">
+          <h2>Herramientas utilizadas</h2>
+          <div class="accent-line"></div>
+          <p>
+            El proyecto se implemento con una base tecnica simple y reproducible, orientada a procesamiento de datos,
+            modelado estadistico y automatizacion de corridas.
+          </p>
+        </div>
+        <div class="story-grid">
+          <div class="story-card">
+            <span class="badge">Lenguaje y entorno</span>
+            <h3>Python y PowerShell</h3>
+            <p>Python se uso para el procesamiento y modelado; PowerShell para runners, validaciones y ejecucion reproducible.</p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Datos y modelado</span>
+            <h3>pandas, xarray, scikit-learn y LightGBM</h3>
+            <p>Estas herramientas sostuvieron la preparacion de datos, la calibracion del viento y el modelado de potencia por regimenes.</p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Artefactos y visualizacion</span>
+            <h3>parquet, JSON y matplotlib</h3>
+            <p>Se usaron formatos simples para artefactos reproducibles y figuras que ayudaran a interpretar resultados y tomar decisiones.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
           <h2>Conclusion ejecutiva</h2>
           <div class="accent-line"></div>
           <p>
@@ -1236,6 +1236,34 @@
               Para cerrar la brecha restante haria falta mejor informacion operacional, como SCADA, disponibilidad de
               turbinas y viento mas representativo del rotor.
             </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <h2>Glosario rapido</h2>
+          <div class="accent-line"></div>
+          <p>
+            Esta pagina uso lenguaje mas operacional. Si quieres profundizar, estas son las equivalencias con los
+            terminos tecnicos del proyecto.
+          </p>
+        </div>
+        <div class="story-grid">
+          <div class="story-card">
+            <span class="badge">Correccion de viento</span>
+            <h3>MOS</h3>
+            <p>Postproceso estadistico para corregir el pronostico meteorologico antes de convertirlo en potencia.</p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Modelo por regimenes</span>
+            <h3>MOE</h3>
+            <p>Arquitectura con un selector de regimen y varios submodelos para condiciones operativas distintas.</p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Historial reciente</span>
+            <h3>Safe lags</h3>
+            <p>Valores pasados de potencia o rampa que ya estaban disponibles al momento de emitir el pronostico.</p>
           </div>
         </div>
       </article>
