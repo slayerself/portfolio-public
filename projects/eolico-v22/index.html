@@ -641,8 +641,8 @@
           <h1>Pronostico eolico day-ahead con datos abiertos</h1>
           <p class="lede">
             Sistema operacional para una planta de 36 MW con emision diaria a las 08:00 hora Chile. El proyecto
-            combina calibracion MOS del viento, Mixture of Experts para potencia inyectada y benchmark contra la
-            programacion historica del Coordinador.
+            combina una correccion estadistica del pronostico de viento, un modelo de potencia por regimenes
+            operativos (MOE) y una comparacion directa contra la programacion historica del Coordinador.
           </p>
           <div class="hero-actions">
             <a class="button primary" href="#benchmark">Ver resultados</a>
@@ -650,8 +650,8 @@
           </div>
           <div class="chip-row">
             <span class="chip">Day-ahead</span>
-            <span class="chip">Issue 08:00 CL</span>
-            <span class="chip">Lead 1..24</span>
+            <span class="chip">Emision 08:00 CL</span>
+            <span class="chip">Horizonte 24 h</span>
             <span class="chip">36 MW</span>
             <span class="chip">Datos abiertos</span>
           </div>
@@ -659,19 +659,19 @@
 
         <div class="hero-side">
           <div class="hero-card">
-            <div class="title">Resultado interno</div>
-            <strong>MAEn 9.89%</strong>
+            <div class="title">Que se construyo</div>
+            <strong>Pronostico operativo de 24 horas</strong>
             <p>
-              Candidato final congelado: <code>baseline_soft_cqr</code>. Resultado obtenido sobre la ventana de test
-              operacional completa del proyecto.
+              El flujo toma datos abiertos, corrige el viento pronosticado y estima la potencia inyectada para las
+              24 horas siguientes desde una emision fija diaria.
             </p>
           </div>
           <div class="hero-card">
-            <div class="title">Referencia externa</div>
-            <strong>Benchmark contra Coordinador</strong>
+            <div class="title">Como se evaluo</div>
+            <strong>Comparacion justa con referencia externa</strong>
             <p>
-              Comparacion leakage-safe con 90 dias alineados por snapshot diario, usando las mismas metricas que
-              importan operacionalmente: <code>MAEn</code>, <code>RMSEn</code> y <code>BIASn</code>.
+              Se comparo contra la version diaria publicada por el Coordinador, usando la misma ventana operacional y
+              las mismas metricas que importan en la practica: <code>MAEn</code>, <code>RMSEn</code> y <code>BIASn</code>.
             </p>
           </div>
         </div>
@@ -744,25 +744,25 @@
               <polygon points="238,101 246,109 238,117" fill="#172126" />
               <polygon points="460,101 468,109 460,117" fill="#172126" />
               <polygon points="682,101 690,109 682,117" fill="#172126" />
-              <text x="48" y="88" font-size="14" font-weight="700">Datos abiertos</text>
-              <text x="48" y="112" font-size="13">OpenMeteo forecast</text>
-              <text x="48" y="132" font-size="13">calendario local</text>
-              <text x="48" y="152" font-size="13">potencia historica</text>
+              <text x="109" y="88" font-size="14" font-weight="700" text-anchor="middle">Datos abiertos</text>
+              <text x="109" y="112" font-size="13" text-anchor="middle">OpenMeteo forecast</text>
+              <text x="109" y="132" font-size="13" text-anchor="middle">calendario local</text>
+              <text x="109" y="152" font-size="13" text-anchor="middle">potencia historica</text>
 
-              <text x="276" y="88" font-size="14" font-weight="700" fill="#fffaf3">Correccion de viento</text>
-              <text x="276" y="112" font-size="13" fill="#fffaf3">corrige sesgo del viento</text>
-              <text x="276" y="132" font-size="13" fill="#fffaf3">calibra incertidumbre</text>
-              <text x="276" y="152" font-size="13" fill="#fffaf3">por horas 1..24</text>
+              <text x="331" y="88" font-size="14" font-weight="700" fill="#fffaf3" text-anchor="middle">Correccion de viento</text>
+              <text x="331" y="112" font-size="13" fill="#fffaf3" text-anchor="middle">corrige sesgo del viento</text>
+              <text x="331" y="132" font-size="13" fill="#fffaf3" text-anchor="middle">calibra incertidumbre</text>
+              <text x="331" y="152" font-size="13" fill="#fffaf3" text-anchor="middle">por horas 1..24</text>
 
-              <text x="498" y="88" font-size="14" font-weight="700">Modelo por regimenes</text>
-              <text x="498" y="112" font-size="13">submodelos de potencia</text>
-              <text x="498" y="132" font-size="13">regimenes operativos</text>
-              <text x="498" y="152" font-size="13">forecast q50 y bandas</text>
+              <text x="553" y="88" font-size="14" font-weight="700" text-anchor="middle">Modelo por regimenes</text>
+              <text x="553" y="112" font-size="13" text-anchor="middle">submodelos de potencia</text>
+              <text x="553" y="132" font-size="13" text-anchor="middle">regimenes operativos</text>
+              <text x="553" y="152" font-size="13" text-anchor="middle">forecast q50 y bandas</text>
 
-              <text x="718" y="88" font-size="14" font-weight="700">Benchmark</text>
-              <text x="718" y="112" font-size="13">version diaria</text>
-              <text x="718" y="132" font-size="13">MAEn RMSEn BIASn</text>
-              <text x="718" y="152" font-size="13">vs Coordinador</text>
+              <text x="763" y="88" font-size="14" font-weight="700" text-anchor="middle">Benchmark</text>
+              <text x="763" y="112" font-size="13" text-anchor="middle">version diaria</text>
+              <text x="763" y="132" font-size="13" text-anchor="middle">MAEn RMSEn BIASn</text>
+              <text x="763" y="152" font-size="13" text-anchor="middle">vs Coordinador</text>
             </svg>
           </div>
           <div class="why-grid">
