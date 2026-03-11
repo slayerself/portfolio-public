@@ -354,7 +354,8 @@
 
     .story-grid,
     .figure-grid,
-    .two-col {
+    .two-col,
+    .why-grid {
       display: grid;
       gap: 1rem;
     }
@@ -393,8 +394,24 @@
       line-height: 1.65;
     }
 
+    .story-card ul {
+      margin: 0.75rem 0 0;
+      padding-left: 1rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .story-card li + li {
+      margin-top: 0.35rem;
+    }
+
     .two-col {
       grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .why-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 1rem;
     }
 
     .metric-grid {
@@ -569,7 +586,8 @@
       .facts,
       .metric-grid,
       .story-grid,
-      .figure-grid {
+      .figure-grid,
+      .why-grid {
         grid-template-columns: 1fr;
       }
 
@@ -746,6 +764,34 @@
               <text x="718" y="132" font-size="13">MAEn RMSEn BIASn</text>
               <text x="718" y="152" font-size="13">vs Coordinador</text>
             </svg>
+          </div>
+          <div class="why-grid">
+            <article class="story-card">
+              <span class="badge">Por que MOS</span>
+              <h3>Calibrar primero el viento</h3>
+              <p>
+                OpenMeteo entregaba una base util, pero no lo suficientemente alineada con el sitio como para pasar directo a potencia.
+                El bloque MOS se uso para corregir sesgo local y estabilizar la senal meteorologica antes del modelo final.
+              </p>
+              <ul>
+                <li>Corrige el viento forecast antes de mapearlo a potencia.</li>
+                <li>Reduce error sistematico por sitio, hora y lead.</li>
+                <li>Entrega una entrada mas consistente para el bloque de potencia.</li>
+              </ul>
+            </article>
+            <article class="story-card">
+              <span class="badge">Por que MOE</span>
+              <h3>No todos los regimenes se comportan igual</h3>
+              <p>
+                Un solo regresor era demasiado rigido para transiciones, curtailment-like y eventos shutdown-like.
+                El MOE permitio separar familias operativas sin romper la salida unica que se necesita para uso diario.
+              </p>
+              <ul>
+                <li>Distingue comportamientos normales y regimenes especiales.</li>
+                <li>Combina gating y expertos en una prediccion operacional unica.</li>
+                <li>Sirvio para estudiar rampas y errores por familia, no solo error global.</li>
+              </ul>
+            </article>
           </div>
           <p class="mini-note">
             La arquitectura se penso para un caso operacional real y no para una validacion academica desconectada de la emision diaria.
