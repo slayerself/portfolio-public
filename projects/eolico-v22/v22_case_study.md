@@ -12,7 +12,7 @@ El caso operacional se fijo en:
 
 - timezone: `America/Santiago`
 - hora de emision: `08:00` local
-- horizonte: `lead 1..24`
+- horizonte: `24 horas siguientes`
 - target: `power_real_mw`
 
 ## Problema
@@ -37,7 +37,7 @@ La restriccion principal del proyecto fue la observabilidad: no se uso SCADA, di
 
 1. `MOS climatico`
    - corrige sesgo del viento forecast
-   - calibra incertidumbre por `lead`
+   - calibra incertidumbre por hora del horizonte
 
 2. `MOE de potencia`
    - modela regimens operativos con mezcla de expertos
@@ -45,17 +45,17 @@ La restriccion principal del proyecto fue la observabilidad: no se uso SCADA, di
 
 3. `Inferencia diaria`
    - emision a las `08:00` hora Chile
-   - salida para `lead 1..24`
+   - salida para las `24 horas` posteriores
 
 ## Rigor metodologico
 
 El proyecto se diseno para evitar leakage temporal:
 
-- split por `issue_time`, no por `valid_time`
+- split por momento de emision, no por la hora futura a pronosticar
 - ventana operacional fija `08:00 -> 24h`
 - validacion temporal `train / val / test`
-- calibracion final ajustada en `val`, no en `test`
-- benchmark externo alineado por emision diaria
+- calibracion final ajustada en validacion, no en prueba
+- benchmark externo alineado por version diaria emitida
 
 ## Resultado interno final
 
@@ -73,9 +73,9 @@ Interpretacion:
 - resultado util para memoria y portafolio tecnico
 - aun por debajo de lo esperable para una solucion industrial con SCADA / hub-height
 
-![Benchmark interno por lead](assets/benchmark_maen_by_lead_v22.png)
+![Benchmark interno por hora del horizonte](assets/benchmark_maen_by_lead_v22.png)
 
-El comportamiento por `lead` importa mas que una sola metrica agregada. Esta vista se uso para detectar donde el error crecia de forma sistematica y orientar los experimentos posteriores.
+El comportamiento por hora del horizonte importa mas que una sola metrica agregada. Esta vista se uso para detectar donde el error crecia de forma sistematica y orientar los experimentos posteriores.
 
 ## Benchmark externo contra el Coordinador
 
@@ -85,7 +85,7 @@ Se construyo un benchmark leakage-safe contra la programacion diaria historica d
 
 Para cada dia `D`:
 
-- se usa solo el snapshot del Coordinador `D_MM.csv`
+- se usa solo la version diaria publicada por el Coordinador `D_MM.csv`
 - se toma la ventana `D 09:00` a `D+1 08:00`
 - se compara contra el forecast propio emitido a las `08:00`
 
@@ -118,6 +118,10 @@ Lectura:
 ![Benchmark global contra Coordinador](assets/benchmark_overall_metrics_v22.png)
 
 Esta comparacion resume la conclusion operacional del proyecto: el benchmark externo fue suficientemente exigente como para mostrar que la solucion era valida metodologicamente, pero todavia no superaba a la referencia externa.
+
+![Comparacion horaria de potencia](assets/benchmark_weekly_power_comparison_v22.png)
+
+La comparacion horaria sobre una semana operativa ayuda a ver algo que una sola media no muestra: donde cada curva sigue bien la potencia real y donde pierde seguimiento frente a cambios mas bruscos.
 
 ## Experimentos relevantes
 

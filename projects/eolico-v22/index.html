@@ -752,7 +752,7 @@
               <text x="276" y="88" font-size="14" font-weight="700" fill="#fffaf3">MOS climatico</text>
               <text x="276" y="112" font-size="13" fill="#fffaf3">corrige sesgo del viento</text>
               <text x="276" y="132" font-size="13" fill="#fffaf3">calibra incertidumbre</text>
-              <text x="276" y="152" font-size="13" fill="#fffaf3">por lead 1..24</text>
+              <text x="276" y="152" font-size="13" fill="#fffaf3">por horas 1..24</text>
 
               <text x="498" y="88" font-size="14" font-weight="700">MOE de potencia</text>
               <text x="498" y="112" font-size="13">mezcla de expertos</text>
@@ -760,7 +760,7 @@
               <text x="498" y="152" font-size="13">forecast q50 y bandas</text>
 
               <text x="718" y="88" font-size="14" font-weight="700">Benchmark</text>
-              <text x="718" y="112" font-size="13">issue diario</text>
+              <text x="718" y="112" font-size="13">version diaria</text>
               <text x="718" y="132" font-size="13">MAEn RMSEn BIASn</text>
               <text x="718" y="152" font-size="13">vs Coordinador</text>
             </svg>
@@ -775,7 +775,7 @@
               </p>
               <ul>
                 <li>Corrige el viento forecast antes de mapearlo a potencia.</li>
-                <li>Reduce error sistematico por sitio, hora y lead.</li>
+                <li>Reduce error sistematico por sitio, hora y horizonte.</li>
                 <li>Entrega una entrada mas consistente para el bloque de potencia.</li>
               </ul>
             </article>
@@ -810,29 +810,29 @@
             <div class="step">
               <div class="step-number">1</div>
               <div>
-                <h3>Split por <code>issue_time</code></h3>
-                <p>La separacion temporal se definio por momento de emision, no por timestamp objetivo.</p>
+                <h3>Split por momento de emision</h3>
+                <p>La separacion temporal se definio por la version diaria publicada, no por la hora futura que se queria pronosticar.</p>
               </div>
             </div>
             <div class="step">
               <div class="step-number">2</div>
               <div>
                 <h3>Ventana operacional fija</h3>
-                <p>El caso se fijo en <code>08:00 America/Santiago</code> con horizonte <code>lead 1..24</code>.</p>
+                <p>El caso se fijo en <code>08:00 America/Santiago</code> con horizonte horario de <code>24 horas</code> desde la emision.</p>
               </div>
             </div>
             <div class="step">
               <div class="step-number">3</div>
               <div>
-                <h3>Calibracion solo en validation</h3>
-                <p>Offsets y ajustes finales se calibraron en <code>val</code>, nunca usando <code>test</code>.</p>
+                <h3>Calibracion solo en validacion</h3>
+                <p>Los ajustes finales se calibraron en la etapa de validacion, nunca usando la ventana de prueba.</p>
               </div>
             </div>
             <div class="step">
               <div class="step-number">4</div>
               <div>
-                <h3>Benchmark por snapshot</h3>
-                <p>La comparacion externa se hizo contra el archivo diario del Coordinador, no contra una serie mezclada por timestamps.</p>
+                <h3>Benchmark por version diaria</h3>
+                <p>La comparacion externa se hizo contra el archivo diario del Coordinador, no mezclando varias versiones para una misma hora.</p>
               </div>
             </div>
           </div>
@@ -872,7 +872,7 @@
           <h2>Benchmark contra el Coordinador</h2>
           <div class="accent-line"></div>
           <p>
-            La regla de comparacion fue estricta: para cada dia <code>D</code>, se uso solo el snapshot
+            La regla de comparacion fue estricta: para cada dia <code>D</code>, se uso solo la version diaria publicada
             <code>D_MM.csv</code> del Coordinador y se recorto la ventana comparable <code>D 09:00 -> D+1 08:00</code>.
           </p>
         </div>
@@ -927,9 +927,16 @@
           <div class="figure-card">
             <img src="assets/benchmark_maen_by_lead_v22.png" alt="MAEn por lead operativo">
             <div class="caption">
-              Vista por lead para detectar donde el error crece de forma sistematica. Esta figura se uso para decidir
+              Vista por hora del horizonte para detectar donde el error crece de forma sistematica. Esta figura se uso para decidir
               si valia la pena abrir experimentos de estabilidad, rampas o ajustes por regimen.
             </div>
+          </div>
+        </div>
+        <div class="figure-card" style="margin-top: 1rem;">
+          <img src="assets/benchmark_weekly_power_comparison_v22.png" alt="Comparacion horaria entre potencia real, Coordinador y modelo propio">
+          <div class="caption">
+            Comparacion horaria en una semana del benchmark. Esta vista complementa las metricas agregadas porque muestra
+            directamente como siguen la curva real tanto el Coordinador como el modelo propio en operacion.
           </div>
         </div>
       </article>
