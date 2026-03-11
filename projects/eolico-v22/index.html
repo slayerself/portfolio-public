@@ -702,7 +702,7 @@
           </div>
           <div class="fact">
             <div class="kicker">Horizonte</div>
-            <strong>Lead 1..24</strong>
+            <strong>24 horas</strong>
             <span>Desde D 09:00 hasta D+1 08:00, con timezone <code>America/Santiago</code>.</span>
           </div>
           <div class="fact">
@@ -749,13 +749,13 @@
               <text x="48" y="132" font-size="13">calendario local</text>
               <text x="48" y="152" font-size="13">potencia historica</text>
 
-              <text x="276" y="88" font-size="14" font-weight="700" fill="#fffaf3">MOS climatico</text>
+              <text x="276" y="88" font-size="14" font-weight="700" fill="#fffaf3">Correccion de viento</text>
               <text x="276" y="112" font-size="13" fill="#fffaf3">corrige sesgo del viento</text>
               <text x="276" y="132" font-size="13" fill="#fffaf3">calibra incertidumbre</text>
               <text x="276" y="152" font-size="13" fill="#fffaf3">por horas 1..24</text>
 
-              <text x="498" y="88" font-size="14" font-weight="700">MOE de potencia</text>
-              <text x="498" y="112" font-size="13">mezcla de expertos</text>
+              <text x="498" y="88" font-size="14" font-weight="700">Modelo por regimenes</text>
+              <text x="498" y="112" font-size="13">submodelos de potencia</text>
               <text x="498" y="132" font-size="13">regimenes operativos</text>
               <text x="498" y="152" font-size="13">forecast q50 y bandas</text>
 
@@ -767,7 +767,7 @@
           </div>
           <div class="why-grid">
             <article class="story-card">
-              <span class="badge">Por que MOS</span>
+              <span class="badge">Correccion de viento</span>
               <h3>Calibrar primero el viento</h3>
               <p>
                 OpenMeteo entregaba una base util, pero no lo suficientemente alineada con el sitio como para pasar directo a potencia.
@@ -780,15 +780,15 @@
               </ul>
             </article>
             <article class="story-card">
-              <span class="badge">Por que MOE</span>
-              <h3>No todos los regimenes se comportan igual</h3>
+              <span class="badge">Modelo por regimenes</span>
+              <h3>No todas las horas operan igual</h3>
               <p>
-                Un solo regresor era demasiado rigido para transiciones, curtailment-like y eventos shutdown-like.
-                El MOE permitio separar familias operativas sin romper la salida unica que se necesita para uso diario.
+                Un solo modelo era demasiado rigido para transiciones, recortes y eventos de caida brusca.
+                El modelo por regimenes permitio separar familias operativas sin romper la salida unica que se necesita para uso diario.
               </p>
               <ul>
                 <li>Distingue comportamientos normales y regimenes especiales.</li>
-                <li>Combina gating y expertos en una prediccion operacional unica.</li>
+                <li>Usa un selector de regimen y submodelos especializados en una prediccion unica.</li>
                 <li>Sirvio para estudiar rampas y errores por familia, no solo error global.</li>
               </ul>
             </article>
@@ -841,11 +841,11 @@
 
       <article class="panel">
         <div class="section-head">
-          <h2>Resultado del candidato final</h2>
+          <h2>Resultado de la solucion base final</h2>
           <div class="accent-line"></div>
           <p>
-            El candidato oficial congelado fue <code>baseline_soft_cqr</code>. Estas fueron las metricas en la ventana
-            de test completa del proyecto.
+            La solucion base final fue la que mejor equilibraba error medio, estabilidad y robustez metodologica.
+            Estas fueron sus metricas en la ventana completa de prueba del proyecto.
           </p>
         </div>
         <div class="metric-grid">
@@ -869,7 +869,7 @@
 
       <article class="panel" id="benchmark">
         <div class="section-head">
-          <h2>Benchmark contra el Coordinador</h2>
+          <h2>Comparacion contra el Coordinador</h2>
           <div class="accent-line"></div>
           <p>
             La regla de comparacion fue estricta: para cada dia <code>D</code>, se uso solo la version diaria publicada
@@ -944,33 +944,33 @@
       <div class="two-col">
         <article class="panel">
           <div class="section-head">
-            <h2>Experimentos relevantes</h2>
+            <h2>Mejoras evaluadas</h2>
             <div class="accent-line"></div>
             <p>
-              Los experimentos no buscaron "probar por probar". Cada uno respondio a una hipotesis concreta sobre rampas,
-              estabilidad o ruteo del MOE.
+              Las pruebas no buscaron "probar por probar". Cada una respondio a una hipotesis concreta sobre rampas,
+              estabilidad o seleccion del submodelo de potencia.
             </p>
           </div>
           <div class="steps">
             <div class="step">
               <div class="step-number">A</div>
               <div>
-                <h3><code>curtailment_like + safe_lags</code></h3>
-                <p>Busco capturar mejor rampas fuertes sin tocar toda la arquitectura.</p>
+                <h3>Mejora enfocada en rampas fuertes</h3>
+                <p>Se reforzo el submodelo de horas con recorte usando historial reciente disponible al momento de emitir.</p>
               </div>
             </div>
             <div class="step">
               <div class="step-number">B</div>
               <div>
-                <h3><code>gate-aware switch</code></h3>
-                <p>Uso selectivo de la rama experimental para evitar dano colateral fuera de los casos objetivo.</p>
+                <h3>Activacion selectiva del submodelo</h3>
+                <p>Se uso la mejora solo cuando el sistema detectaba condiciones propicias, para evitar dano colateral fuera de los casos objetivo.</p>
               </div>
             </div>
             <div class="step">
               <div class="step-number">C</div>
               <div>
-                <h3><code>gating_hier_safe_lags</code></h3>
-                <p>Prueba de si la informacion temporal segura mejora la decision de ruteo entre expertos.</p>
+                <h3>Selector jerarquico con historial reciente</h3>
+                <p>Se evaluo si la informacion temporal disponible al emitir ayudaba a elegir mejor el regimen operativo.</p>
               </div>
             </div>
           </div>
@@ -978,11 +978,11 @@
 
         <article class="panel">
           <div class="section-head">
-            <h2>Decision final</h2>
+            <h2>Que se concluyo</h2>
             <div class="accent-line"></div>
             <p>
               Las variantes nuevas mejoraron estabilidad, sesgo y algunas metricas secundarias, pero no aparecio una
-              mejora robusta en <code>MAEn</code>. Por eso el candidato oficial no se reemplazo.
+              mejora robusta en <code>MAEn</code>. Por eso la solucion base final no se reemplazo.
             </p>
           </div>
           <div class="story-grid" style="grid-template-columns: 1fr;">
@@ -1011,16 +1011,46 @@
           <div class="figure-card">
             <img src="assets/ramp_bucket_family_mix_v22.png" alt="Distribucion de familias por intensidad de rampa">
             <div class="caption">
-              El estudio de rampas mostro que los eventos mas fuertes se concentraban en <code>curtailment_like</code>.
-              Eso justifico experimentar con ramas especificas y no multiplicar expertos sin una separacion real.
+              El estudio de rampas mostro que los eventos mas fuertes se concentraban en horas con comportamiento de
+              recorte. Eso justifico experimentar con submodelos especificos y no multiplicar alternativas sin una
+              separacion real.
             </div>
           </div>
           <div class="figure-card">
-            <img src="assets/gating_stageB_feature_importance_v22.png" alt="Importancia de variables del gating jerarquico">
+            <img src="assets/gating_stageB_feature_importance_v22.png" alt="Importancia de variables del selector jerarquico">
             <div class="caption">
-              Los <code>safe_lags</code> entraron entre las variables mas influyentes del gating jerarquico. Habia
-              senal real para mejorar el ruteo, pero no la suficiente para cerrar por si sola la brecha de <code>MAEn</code>.
+              El historial reciente disponible al emitir entro entre las variables mas influyentes del selector
+              jerarquico. Habia senal real para mejorar la eleccion del submodelo, pero no la suficiente para cerrar
+              por si sola la brecha de <code>MAEn</code>.
             </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <h2>Glosario rapido</h2>
+          <div class="accent-line"></div>
+          <p>
+            Esta pagina uso lenguaje mas operacional. Si quieres profundizar, estas son las equivalencias con los
+            terminos tecnicos del proyecto.
+          </p>
+        </div>
+        <div class="story-grid">
+          <div class="story-card">
+            <span class="badge">Correccion de viento</span>
+            <h3>MOS</h3>
+            <p>Postproceso estadistico para corregir el pronostico meteorologico antes de convertirlo en potencia.</p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Modelo por regimenes</span>
+            <h3>MOE</h3>
+            <p>Arquitectura con un selector de regimen y varios submodelos para condiciones operativas distintas.</p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Historial reciente</span>
+            <h3>Safe lags</h3>
+            <p>Valores pasados de potencia o rampa que ya estaban disponibles al momento de emitir el pronostico.</p>
           </div>
         </div>
       </article>
