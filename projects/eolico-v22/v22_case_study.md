@@ -2,10 +2,10 @@
 
 ## Resumen
 
-Desarrolle un sistema operacional de pronostico eolico day-ahead para una planta de `36 MW`, usando solo datos de libre acceso para meteorologia y potencia historica medida. El pipeline combina:
+Desarrolle un sistema operacional de pronostico eolico para una planta de `36 MW`, usando solo datos de libre acceso para meteorologia y potencia historica medida. El pipeline combina:
 
-- `MOS` para calibrar el viento de OpenMeteo
-- `MOE` para convertir viento calibrado en potencia inyectada a red
+- correccion estadistica del viento (`MOS`)
+- modelo de potencia por regimenes (`MOE`)
 - evaluacion con metricas del Coordinador: `MAEn`, `RMSEn`, `BIASn`
 
 El caso operacional se fijo en:
@@ -13,7 +13,7 @@ El caso operacional se fijo en:
 - timezone: `America/Santiago`
 - hora de emision: `08:00` local
 - horizonte: `24 horas siguientes`
-- target: `power_real_mw`
+- objetivo: `potencia real inyectada`
 
 ## Problema
 
@@ -39,9 +39,9 @@ La restriccion principal del proyecto fue la observabilidad: no se uso SCADA, di
    - corrige sesgo del viento forecast
    - calibra incertidumbre por hora del horizonte
 
-2. `MOE de potencia`
-   - modela regimens operativos con mezcla de expertos
-   - candidato final: `baseline_soft_cqr`
+2. `Modelo de potencia por regimenes`
+   - modela regimens operativos con mezcla de submodelos
+   - solucion base final: `baseline_soft_cqr`
 
 3. `Inferencia diaria`
    - emision a las `08:00` hora Chile
@@ -59,13 +59,13 @@ El proyecto se diseno para evitar leakage temporal:
 
 ## Resultado interno final
 
-En `test`, el candidato oficial `baseline_soft_cqr` obtuvo:
+En `test`, la solucion base final `baseline_soft_cqr` obtuvo:
 
 - `MAEn = 9.89%`
 - `RMSEn = 14.42%`
 - `BIASn = 1.69%`
-- `MAE q50 = 3.56 MW`
-- `RMSE q50 = 5.19 MW`
+- `MAE del pronostico central = 3.56 MW`
+- `RMSE del pronostico central = 5.19 MW`
 
 Interpretacion:
 
@@ -144,7 +144,7 @@ Hallazgo principal:
 
 ![Rampas por familia](assets/ramp_bucket_family_mix_v22.png)
 
-El estudio de rampas mostro que los eventos fuertes se concentraban en `curtailment_like`. Esa fue la razon para experimentar con ramas especificas y `safe_lags`, en vez de multiplicar expertos sin justificacion.
+El estudio de rampas mostro que los eventos fuertes se concentraban en horas con comportamiento de recorte. Esa fue la razon para experimentar con ramas especificas y `safe_lags`, en vez de multiplicar submodelos sin justificacion.
 
 ### 2. Valor de los safe lags en el gating
 
@@ -159,7 +159,7 @@ La importancia de variables del gating jerarquico mostro que los lags seguros de
 3. Con datos abiertos se puede construir un sistema serio y reproducible.
 4. Sin SCADA, disponibilidad y viento a altura de rotor, el margen de mejora en `NMAE` es limitado.
 
-## Stack
+## Herramientas utilizadas
 
 - Python
 - pandas / numpy / xarray
@@ -175,3 +175,4 @@ La importancia de variables del gating jerarquico mostro que los lags seguros de
 - `config/v22_moe_power_protocol.yaml`
 - `reports/v22/moe/final_candidate/final_candidate_summary_v22.json`
 - `reports/v22/moe/coord_benchmark_option1/coord_benchmark_option1_summary_v22.json`
+

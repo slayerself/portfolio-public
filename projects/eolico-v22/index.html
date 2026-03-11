@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pronostico Eolico Day-Ahead | Case Study</title>
-  <meta name="description" content="Caso de estudio de un sistema de pronostico eolico day-ahead con datos abiertos, calibracion MOS, mezcla de expertos y benchmark contra el Coordinador.">
+  <meta name="description" content="Caso de estudio de un sistema de pronostico eolico con datos abiertos, correccion estadistica del viento, modelo de potencia por regimenes y benchmark contra el Coordinador.">
   <meta name="theme-color" content="#0d6b57">
   <meta property="og:title" content="Pronostico Eolico Day-Ahead | Case Study">
-  <meta property="og:description" content="Sistema operacional para una planta de 36 MW con datos abiertos, validacion anti-leak y benchmark externo.">
+  <meta property="og:description" content="Sistema operacional para una planta de 36 MW con datos abiertos, correccion del viento, modelo de potencia por regimenes y benchmark externo.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/benchmark_overall_metrics_v22.png">
   <meta property="og:locale" content="es_CL">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Pronostico Eolico Day-Ahead | Case Study">
-  <meta name="twitter:description" content="Caso de estudio de forecasting eolico con datos abiertos y benchmark contra el Coordinador.">
+  <meta name="twitter:description" content="Caso de estudio de pronostico eolico con datos abiertos, correccion del viento y comparacion contra el Coordinador.">
   <meta name="twitter:image" content="assets/benchmark_overall_metrics_v22.png">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -128,6 +128,11 @@
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
       backdrop-filter: blur(12px);
+    }
+
+    .panel.subtle {
+      background: rgba(255, 250, 242, 0.68);
+      box-shadow: var(--shadow-soft);
     }
 
     .hero {
@@ -637,7 +642,7 @@
     <section class="hero">
       <div class="hero-grid">
         <div>
-          <span class="eyebrow">Case Study | ML aplicado a energia</span>
+          <span class="eyebrow">Caso de estudio | ML aplicado a energia</span>
           <h1>Pronostico eolico day-ahead con datos abiertos</h1>
           <p class="lede">
             Sistema operacional para una planta de 36 MW con emision diaria a las 08:00 hora Chile. El proyecto
@@ -646,10 +651,10 @@
           </p>
           <div class="hero-actions">
             <a class="button primary" href="#benchmark">Ver resultados</a>
-            <a class="button secondary" href="v22_case_study.md">Abrir case study</a>
+            <a class="button secondary" href="v22_case_study.md">Ver resumen tecnico</a>
           </div>
           <div class="chip-row">
-            <span class="chip">Day-ahead</span>
+            <span class="chip">Pronostico diario</span>
             <span class="chip">Emision 08:00 CL</span>
             <span class="chip">Horizonte 24 h</span>
             <span class="chip">36 MW</span>
@@ -926,17 +931,17 @@
           <div class="metric">
             <div class="label">MAEn</div>
             <div class="value">9.89%</div>
-            <div class="delta">MAE q50 = 3.56 MW</div>
+            <div class="delta">MAE del pronostico central = 3.56 MW</div>
           </div>
           <div class="metric">
             <div class="label">RMSEn</div>
             <div class="value">14.42%</div>
-            <div class="delta">RMSE q50 = 5.19 MW</div>
+            <div class="delta">RMSE del pronostico central = 5.19 MW</div>
           </div>
           <div class="metric">
             <div class="label">BIASn</div>
             <div class="value">1.69%</div>
-            <div class="delta">Cobertura q25-q75 = 47.84%</div>
+            <div class="delta">Cobertura del rango central = 47.84%</div>
           </div>
         </div>
       </article>
@@ -1175,7 +1180,7 @@
         </div>
       </article>
 
-      <article class="panel">
+      <article class="panel subtle">
         <div class="section-head">
           <h2>Herramientas utilizadas</h2>
           <div class="accent-line"></div>
@@ -1240,7 +1245,7 @@
         </div>
       </article>
 
-      <article class="panel">
+      <article class="panel subtle">
         <div class="section-head">
           <h2>Glosario rapido</h2>
           <div class="accent-line"></div>
