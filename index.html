@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio | ML aplicado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5efdf;
+      --ink: #162126;
+      --muted: #5d696d;
+      --card: rgba(255, 249, 240, 0.84);
+      --line: rgba(22, 33, 38, 0.12);
+      --accent: #0d6b57;
+      --accent-soft: rgba(13, 107, 87, 0.14);
+      --warm: #c98531;
+      --shadow: 0 24px 70px rgba(22, 33, 38, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Manrope", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(201, 133, 49, 0.18), transparent 22rem),
+        radial-gradient(circle at bottom right, rgba(13, 107, 87, 0.18), transparent 24rem),
+        linear-gradient(135deg, #fbf5ea 0%, #efe2cc 100%);
+    }
+    .page {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+    h1, h2 {
+      font-family: "Fraunces", serif;
+      margin: 0;
+      line-height: 1.02;
+    }
+    .hero, .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .hero {
+      padding: 2.4rem;
+    }
+    .eyebrow {
+      display: inline-flex;
+      padding: 0.35rem 0.72rem;
+      border-radius: 999px;
+      background: rgba(22, 33, 38, 0.05);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.72rem;
+    }
+    h1 {
+      margin-top: 1rem;
+      font-size: clamp(2.5rem, 5vw, 4.8rem);
+      max-width: 10ch;
+      letter-spacing: -0.03em;
+    }
+    .lede {
+      margin-top: 1rem;
+      color: var(--muted);
+      max-width: 64ch;
+      line-height: 1.75;
+      font-size: 1.04rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+    .card {
+      padding: 1.2rem;
+    }
+    .tag {
+      display: inline-flex;
+      padding: 0.3rem 0.58rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .card h2 {
+      margin-top: 0.8rem;
+      font-size: 1.65rem;
+    }
+    .card p {
+      margin: 0.75rem 0 0;
+      color: var(--muted);
+      line-height: 1.68;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1rem;
+    }
+    .chip {
+      padding: 0.44rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    .button {
+      display: inline-flex;
+      margin-top: 1rem;
+      padding: 0.8rem 1rem;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fffaf2;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <span class="eyebrow">Portfolio | ML aplicado</span>
+      <h1>Proyectos de forecasting y sistemas predictivos</h1>
+      <p class="lede">
+        Seleccion curada de proyectos orientados a problemas reales, con foco en metodologia, validacion correcta,
+        decisiones tecnicas defendibles y resultados medidos contra referencias externas cuando corresponde.
+      </p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <span class="tag">Proyecto 01</span>
+        <h2>Pronostico eolico day-ahead con datos abiertos</h2>
+        <p>
+          Sistema operacional para una planta de 36 MW con emision diaria 08:00 CL, combinando MOS para calibracion de
+          viento y un Mixture of Experts para potencia inyectada. Incluye benchmark leakage-safe contra la programacion
+          del Coordinador.
+        </p>
+        <div class="meta">
+          <span class="chip">Python</span>
+          <span class="chip">LightGBM</span>
+          <span class="chip">Forecasting</span>
+          <span class="chip">Benchmark externo</span>
+        </div>
+        <a class="button" href="projects/eolico-v22/">Ver proyecto</a>
+      </article>
+
+      <article class="card">
+        <span class="tag">Espacio reservado</span>
+        <h2>Proximo proyecto</h2>
+        <p>
+          Esta estructura esta pensada para crecer como portafolio general. Cada proyecto puede vivir en su propia
+          carpeta dentro de <code>projects/</code>, con narrativa, graficas y una version visual independiente.
+        </p>
+        <div class="meta">
+          <span class="chip">Escalable</span>
+          <span class="chip">Sitio estatico</span>
+          <span class="chip">Git-friendly</span>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

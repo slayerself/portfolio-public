@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pronostico Eolico Day-Ahead | Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5eddc;
+      --paper: rgba(255, 249, 240, 0.82);
+      --paper-strong: #fffaf2;
+      --paper-soft: rgba(255, 255, 255, 0.54);
+      --ink: #152126;
+      --muted: #58676c;
+      --line: rgba(21, 33, 38, 0.12);
+      --line-strong: rgba(21, 33, 38, 0.2);
+      --accent: #0d6b57;
+      --accent-soft: rgba(13, 107, 87, 0.12);
+      --accent-warm: #ca8331;
+      --accent-warm-soft: rgba(202, 131, 49, 0.16);
+      --shadow: 0 28px 80px rgba(21, 33, 38, 0.1);
+      --shadow-soft: 0 18px 42px rgba(21, 33, 38, 0.08);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Manrope", sans-serif;
+      background:
+        radial-gradient(circle at 8% 10%, rgba(202, 131, 49, 0.18), transparent 20rem),
+        radial-gradient(circle at 88% 12%, rgba(13, 107, 87, 0.18), transparent 24rem),
+        linear-gradient(135deg, #fbf5ea 0%, #f0e4ce 52%, #ebdcc4 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    code {
+      font-family: "Consolas", "Courier New", monospace;
+      background: rgba(23, 33, 38, 0.05);
+      padding: 0.1rem 0.3rem;
+      border-radius: 6px;
+    }
+
+    .page {
+      width: min(1160px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 1.2rem 0 3rem;
+      position: relative;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 0.6rem 0.2rem 0;
+    }
+
+    .nav-brand {
+      font-family: "Fraunces", serif;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    .nav-links a {
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .nav-links a:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .hero,
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      padding: 2.6rem;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      right: -7rem;
+      top: -5rem;
+      width: 19rem;
+      height: 19rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(15, 106, 88, 0.18), transparent 70%);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: -5rem;
+      bottom: -6rem;
+      width: 16rem;
+      height: 16rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(203, 133, 49, 0.14), transparent 70%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.38rem 0.72rem;
+      border-radius: 999px;
+      background: rgba(23, 33, 38, 0.06);
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 1.2rem;
+      align-items: end;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Fraunces", serif;
+      line-height: 1.02;
+    }
+
+    h1 {
+      margin-top: 1rem;
+      font-size: clamp(2.6rem, 5vw, 5.1rem);
+      max-width: 11ch;
+      letter-spacing: -0.03em;
+    }
+
+    h2 {
+      font-size: clamp(1.7rem, 2vw, 2.2rem);
+    }
+
+    .lede {
+      max-width: 62ch;
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
+    }
+
+    .hero-actions,
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1.2rem;
+    }
+
+    .button,
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.72rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 0.92rem;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: #fffaf3;
+      box-shadow: 0 10px 26px rgba(13, 107, 87, 0.2);
+    }
+
+    .button.secondary,
+    .chip {
+      background: rgba(255, 255, 255, 0.52);
+      border-color: var(--line);
+      color: var(--muted);
+    }
+
+    .button:hover,
+    .chip:hover {
+      transform: translateY(-1px);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .hero-card,
+    .panel,
+    .figure-card,
+    .step,
+    .fact,
+    .story-card {
+      border-radius: var(--radius-lg);
+    }
+
+    .hero-card {
+      padding: 1.15rem;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 250, 244, 0.42));
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-card .title {
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .hero-card strong {
+      display: block;
+      margin-top: 0.38rem;
+      font-size: 1.55rem;
+    }
+
+    .hero-card p {
+      margin: 0.75rem 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.96rem;
+    }
+
+    .sections {
+      display: grid;
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+    }
+
+    .panel {
+      padding: 1.45rem;
+      position: relative;
+    }
+
+    .section-head {
+      display: grid;
+      gap: 0.55rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-head p,
+    .panel p,
+    .panel li {
+      color: var(--muted);
+      line-height: 1.68;
+    }
+
+    .accent-line {
+      width: 5.4rem;
+      height: 0.38rem;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    .fact {
+      padding: 1rem;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(23, 33, 38, 0.03));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .fact .kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+    }
+
+    .fact strong {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: 1.28rem;
+    }
+
+    .fact span {
+      display: block;
+      margin-top: 0.42rem;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.55;
+    }
+
+    .story-grid,
+    .figure-grid,
+    .two-col {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .story-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .story-card {
+      padding: 1.1rem;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(249, 242, 231, 0.5));
+      box-shadow: var(--shadow-soft);
+    }
+
+    .story-card .badge {
+      display: inline-flex;
+      padding: 0.3rem 0.58rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .story-card h3 {
+      font-size: 1.2rem;
+      margin-top: 0.8rem;
+    }
+
+    .story-card p {
+      margin: 0.7rem 0 0;
+      font-size: 0.96rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .two-col {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    .metric {
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: rgba(23, 33, 38, 0.045);
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 0.79rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .metric .value {
+      margin-top: 0.38rem;
+      font-size: 1.72rem;
+      font-weight: 700;
+    }
+
+    .metric .delta {
+      margin-top: 0.3rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .pipeline-shell {
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(248, 241, 231, 0.88));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .pipeline-svg text {
+      font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+      fill: var(--ink);
+    }
+
+    .steps {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.9rem;
+      padding: 1rem;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(252, 247, 239, 0.46));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .step-number {
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fffaf3;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-top: 0.1rem;
+    }
+
+    .step h3 {
+      font-size: 1.08rem;
+    }
+
+    .step p {
+      margin: 0.45rem 0 0;
+      font-size: 0.95rem;
+    }
+
+    .split-band {
+      margin-top: 1rem;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .band-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    }
+
+    .band-row div {
+      padding: 0.85rem 0.95rem;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.38);
+    }
+
+    .band-row.header div {
+      background: rgba(23, 33, 38, 0.06);
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .figure-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .figure-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(251, 245, 236, 0.45));
+      box-shadow: var(--shadow-soft);
+    }
+
+    .figure-card img {
+      background: #fff;
+    }
+
+    .figure-card .caption {
+      padding: 0.95rem 1rem 1rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .mini-note {
+      margin-top: 0.9rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero,
+    .panel {
+      animation: fadeUp 520ms ease both;
+    }
+
+    .panel:nth-of-type(2) { animation-delay: 40ms; }
+    .panel:nth-of-type(3) { animation-delay: 80ms; }
+    .panel:nth-of-type(4) { animation-delay: 120ms; }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 0.25rem;
+      padding: 0.2rem 0.2rem 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .two-col,
+      .facts,
+      .metric-grid,
+      .story-grid,
+      .figure-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .band-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        width: min(100% - 1rem, 1160px);
+      }
+
+      .hero,
+      .panel {
+        padding: 1.25rem;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        gap: 0.45rem;
+      }
+
+      h1 {
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="nav">
+      <div class="nav-brand">Wind Forecast Portfolio</div>
+      <div class="nav-links">
+        <a href="#problema">Problema</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#metodologia">Metodologia</a>
+        <a href="#benchmark">Benchmark</a>
+        <a href="#evidencia">Evidencia</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Case Study | ML aplicado a energia</span>
+          <h1>Pronostico eolico day-ahead con datos abiertos</h1>
+          <p class="lede">
+            Sistema operacional para una planta de 36 MW con emision diaria a las 08:00 hora Chile. El proyecto
+            combina calibracion MOS del viento, Mixture of Experts para potencia inyectada y benchmark contra la
+            programacion historica del Coordinador.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#benchmark">Ver resultados</a>
+            <a class="button secondary" href="v22_case_study.md">Abrir case study</a>
+          </div>
+          <div class="chip-row">
+            <span class="chip">Day-ahead</span>
+            <span class="chip">Issue 08:00 CL</span>
+            <span class="chip">Lead 1..24</span>
+            <span class="chip">36 MW</span>
+            <span class="chip">Datos abiertos</span>
+          </div>
+        </div>
+
+        <div class="hero-side">
+          <div class="hero-card">
+            <div class="title">Resultado interno</div>
+            <strong>MAEn 9.89%</strong>
+            <p>
+              Candidato final congelado: <code>baseline_soft_cqr</code>. Resultado obtenido sobre la ventana de test
+              operacional completa del proyecto.
+            </p>
+          </div>
+          <div class="hero-card">
+            <div class="title">Referencia externa</div>
+            <strong>Benchmark contra Coordinador</strong>
+            <p>
+              Comparacion leakage-safe con 90 dias alineados por snapshot diario, usando las mismas metricas que
+              importan operacionalmente: <code>MAEn</code>, <code>RMSEn</code> y <code>BIASn</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sections">
+      <article class="panel" id="problema">
+        <div class="section-head">
+          <h2>Problema y restricciones</h2>
+          <div class="accent-line"></div>
+          <p>
+            El objetivo no fue entrenar un modelo aislado, sino construir un sistema day-ahead comparable con una
+            operacion real: misma hora de emision, misma ventana de validacion y metricas compatibles con el
+            Coordinador.
+          </p>
+        </div>
+        <div class="facts">
+          <div class="fact">
+            <div class="kicker">Objetivo</div>
+            <strong><code>power_real_mw</code></strong>
+            <span>Potencia realmente inyectada a red, no una curva ideal de produccion.</span>
+          </div>
+          <div class="fact">
+            <div class="kicker">Operacion</div>
+            <strong>08:00 CL</strong>
+            <span>Ventana fija para emision diaria y comparacion justa entre metodos.</span>
+          </div>
+          <div class="fact">
+            <div class="kicker">Horizonte</div>
+            <strong>Lead 1..24</strong>
+            <span>Desde D 09:00 hasta D+1 08:00, con timezone <code>America/Santiago</code>.</span>
+          </div>
+          <div class="fact">
+            <div class="kicker">Limitacion</div>
+            <strong>Sin SCADA</strong>
+            <span>Sin disponibilidad, sin viento a altura de rotor y sin estados operativos internos.</span>
+          </div>
+        </div>
+      </article>
+
+      <div class="two-col" id="pipeline">
+        <article class="panel">
+          <div class="section-head">
+            <h2>Pipeline del sistema</h2>
+            <div class="accent-line"></div>
+            <p>
+              El flujo se organizo en tres capas: correccion del viento, modelado de potencia y benchmark externo.
+            </p>
+          </div>
+          <div class="pipeline-shell">
+            <svg class="pipeline-svg" viewBox="0 0 860 260" role="img" aria-label="Pipeline MOS MOE benchmark">
+              <defs>
+                <linearGradient id="warm" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f5c47d" />
+                  <stop offset="100%" stop-color="#cb8531" />
+                </linearGradient>
+                <linearGradient id="green" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#72b8a2" />
+                  <stop offset="100%" stop-color="#0f6a58" />
+                </linearGradient>
+              </defs>
+              <rect x="24" y="54" rx="22" ry="22" width="170" height="110" fill="url(#warm)" opacity="0.92" />
+              <rect x="246" y="54" rx="22" ry="22" width="170" height="110" fill="url(#green)" opacity="0.92" />
+              <rect x="468" y="54" rx="22" ry="22" width="170" height="110" fill="#f4e3ca" stroke="rgba(23,33,38,0.15)" />
+              <rect x="690" y="54" rx="22" ry="22" width="146" height="110" fill="#f6efe3" stroke="rgba(23,33,38,0.15)" />
+              <path d="M194 109 L246 109" stroke="#172126" stroke-width="2.4" stroke-linecap="round" />
+              <path d="M416 109 L468 109" stroke="#172126" stroke-width="2.4" stroke-linecap="round" />
+              <path d="M638 109 L690 109" stroke="#172126" stroke-width="2.4" stroke-linecap="round" />
+              <polygon points="238,101 246,109 238,117" fill="#172126" />
+              <polygon points="460,101 468,109 460,117" fill="#172126" />
+              <polygon points="682,101 690,109 682,117" fill="#172126" />
+              <text x="48" y="88" font-size="14" font-weight="700">Datos abiertos</text>
+              <text x="48" y="112" font-size="13">OpenMeteo forecast</text>
+              <text x="48" y="132" font-size="13">calendario local</text>
+              <text x="48" y="152" font-size="13">potencia historica</text>
+
+              <text x="276" y="88" font-size="14" font-weight="700" fill="#fffaf3">MOS climatico</text>
+              <text x="276" y="112" font-size="13" fill="#fffaf3">corrige sesgo del viento</text>
+              <text x="276" y="132" font-size="13" fill="#fffaf3">calibra incertidumbre</text>
+              <text x="276" y="152" font-size="13" fill="#fffaf3">por lead 1..24</text>
+
+              <text x="498" y="88" font-size="14" font-weight="700">MOE de potencia</text>
+              <text x="498" y="112" font-size="13">mezcla de expertos</text>
+              <text x="498" y="132" font-size="13">regimenes operativos</text>
+              <text x="498" y="152" font-size="13">forecast q50 y bandas</text>
+
+              <text x="718" y="88" font-size="14" font-weight="700">Benchmark</text>
+              <text x="718" y="112" font-size="13">issue diario</text>
+              <text x="718" y="132" font-size="13">MAEn RMSEn BIASn</text>
+              <text x="718" y="152" font-size="13">vs Coordinador</text>
+            </svg>
+          </div>
+          <p class="mini-note">
+            La arquitectura se penso para un caso operacional real y no para una validacion academica desconectada de la emision diaria.
+          </p>
+        </article>
+
+        <article class="panel" id="metodologia">
+          <div class="section-head">
+            <h2>Metodologia y control anti-leak</h2>
+            <div class="accent-line"></div>
+            <p>
+              La validez del proyecto dependia de respetar la logica de emision y de evitar mezclar informacion futura.
+            </p>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div>
+                <h3>Split por <code>issue_time</code></h3>
+                <p>La separacion temporal se definio por momento de emision, no por timestamp objetivo.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div>
+                <h3>Ventana operacional fija</h3>
+                <p>El caso se fijo en <code>08:00 America/Santiago</code> con horizonte <code>lead 1..24</code>.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div>
+                <h3>Calibracion solo en validation</h3>
+                <p>Offsets y ajustes finales se calibraron en <code>val</code>, nunca usando <code>test</code>.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">4</div>
+              <div>
+                <h3>Benchmark por snapshot</h3>
+                <p>La comparacion externa se hizo contra el archivo diario del Coordinador, no contra una serie mezclada por timestamps.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <article class="panel">
+        <div class="section-head">
+          <h2>Resultado del candidato final</h2>
+          <div class="accent-line"></div>
+          <p>
+            El candidato oficial congelado fue <code>baseline_soft_cqr</code>. Estas fueron las metricas en la ventana
+            de test completa del proyecto.
+          </p>
+        </div>
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="label">MAEn</div>
+            <div class="value">9.89%</div>
+            <div class="delta">MAE q50 = 3.56 MW</div>
+          </div>
+          <div class="metric">
+            <div class="label">RMSEn</div>
+            <div class="value">14.42%</div>
+            <div class="delta">RMSE q50 = 5.19 MW</div>
+          </div>
+          <div class="metric">
+            <div class="label">BIASn</div>
+            <div class="value">1.69%</div>
+            <div class="delta">Cobertura q25-q75 = 47.84%</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel" id="benchmark">
+        <div class="section-head">
+          <h2>Benchmark contra el Coordinador</h2>
+          <div class="accent-line"></div>
+          <p>
+            La regla de comparacion fue estricta: para cada dia <code>D</code>, se uso solo el snapshot
+            <code>D_MM.csv</code> del Coordinador y se recorto la ventana comparable <code>D 09:00 -> D+1 08:00</code>.
+          </p>
+        </div>
+
+        <div class="story-grid">
+          <div class="story-card">
+            <span class="badge">Cobertura</span>
+            <h3>90 dias, 2160 horas</h3>
+            <p>Interseccion limpia de la ventana no-leak del proyecto con snapshots historicos descargados del Coordinador.</p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Resultado</span>
+            <h3>Coordinador gana globalmente</h3>
+            <p>La referencia externa fue mejor en <code>MAEn</code> y <code>RMSEn</code> sobre la ventana comparable.</p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Lectura</span>
+            <h3>El modelo fue competitivo</h3>
+            <p>Con datos abiertos se construyo un sistema serio, pero no suficiente para superar una referencia operacional consolidada.</p>
+          </div>
+        </div>
+
+        <div class="split-band">
+          <div class="band-row header">
+            <div>Fuente</div>
+            <div>MAEn</div>
+            <div>RMSEn</div>
+            <div>BIASn</div>
+          </div>
+          <div class="band-row">
+            <div>Coordinador</div>
+            <div>9.09%</div>
+            <div>12.89%</div>
+            <div>-2.13%</div>
+          </div>
+          <div class="band-row">
+            <div>Modelo propio</div>
+            <div>9.81%</div>
+            <div>14.34%</div>
+            <div>1.59%</div>
+          </div>
+        </div>
+
+        <div class="figure-grid">
+          <div class="figure-card">
+            <img src="assets/benchmark_overall_metrics_v22.png" alt="Benchmark global contra el Coordinador">
+            <div class="caption">
+              Comparacion directa en las metricas que gobiernan la evaluacion operacional. Resume la brecha real entre el
+              sistema propio y la referencia externa.
+            </div>
+          </div>
+          <div class="figure-card">
+            <img src="assets/benchmark_maen_by_lead_v22.png" alt="MAEn por lead operativo">
+            <div class="caption">
+              Vista por lead para detectar donde el error crece de forma sistematica. Esta figura se uso para decidir
+              si valia la pena abrir experimentos de estabilidad, rampas o ajustes por regimen.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <div class="two-col">
+        <article class="panel">
+          <div class="section-head">
+            <h2>Experimentos relevantes</h2>
+            <div class="accent-line"></div>
+            <p>
+              Los experimentos no buscaron "probar por probar". Cada uno respondio a una hipotesis concreta sobre rampas,
+              estabilidad o ruteo del MOE.
+            </p>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">A</div>
+              <div>
+                <h3><code>curtailment_like + safe_lags</code></h3>
+                <p>Busco capturar mejor rampas fuertes sin tocar toda la arquitectura.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">B</div>
+              <div>
+                <h3><code>gate-aware switch</code></h3>
+                <p>Uso selectivo de la rama experimental para evitar dano colateral fuera de los casos objetivo.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">C</div>
+              <div>
+                <h3><code>gating_hier_safe_lags</code></h3>
+                <p>Prueba de si la informacion temporal segura mejora la decision de ruteo entre expertos.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="section-head">
+            <h2>Decision final</h2>
+            <div class="accent-line"></div>
+            <p>
+              Las variantes nuevas mejoraron estabilidad, sesgo y algunas metricas secundarias, pero no aparecio una
+              mejora robusta en <code>MAEn</code>. Por eso el candidato oficial no se reemplazo.
+            </p>
+          </div>
+          <div class="story-grid" style="grid-template-columns: 1fr;">
+            <div class="story-card">
+              <span class="badge">Hallazgo</span>
+              <h3>El limite paso a ser de observabilidad</h3>
+              <p>
+                Sin SCADA, sin disponibilidad y sin viento a altura de rotor, el margen de mejora adicional en
+                <code>NMAE</code> se vuelve mucho mas estrecho que el margen aparente de la arquitectura.
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <article class="panel" id="evidencia">
+        <div class="section-head">
+          <h2>Figuras que guiaron decisiones</h2>
+          <div class="accent-line"></div>
+          <p>
+            El proyecto no se apoyo solo en metricas globales. Estas dos vistas fueron claves para decidir que explorar
+            y que no seguir persiguiendo.
+          </p>
+        </div>
+        <div class="figure-grid">
+          <div class="figure-card">
+            <img src="assets/ramp_bucket_family_mix_v22.png" alt="Distribucion de familias por intensidad de rampa">
+            <div class="caption">
+              El estudio de rampas mostro que los eventos mas fuertes se concentraban en <code>curtailment_like</code>.
+              Eso justifico experimentar con ramas especificas y no multiplicar expertos sin una separacion real.
+            </div>
+          </div>
+          <div class="figure-card">
+            <img src="assets/gating_stageB_feature_importance_v22.png" alt="Importancia de variables del gating jerarquico">
+            <div class="caption">
+              Los <code>safe_lags</code> entraron entre las variables mas influyentes del gating jerarquico. Habia
+              senal real para mejorar el ruteo, pero no la suficiente para cerrar por si sola la brecha de <code>MAEn</code>.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <footer class="footer">
+        <span>Proyecto v22 | Pronostico eolico day-ahead con datos abiertos</span>
+        <a href="v22_case_study.md">Abrir resumen tecnico</a>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>
