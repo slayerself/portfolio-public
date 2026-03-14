@@ -6,6 +6,7 @@ Desarrolle un sistema operacional de pronostico eolico para una planta de `36 MW
 
 - correccion estadistica del viento (`MOS`)
 - modelo de potencia por regimenes (`MOE`)
+- salidas cuantílicas `q25 / q50 / q75` para representar incertidumbre
 - evaluacion con metricas del Coordinador: `MAEn`, `RMSEn`, `BIASn`
 
 El caso operacional se fijo en:
@@ -122,6 +123,10 @@ Esta comparacion resume la conclusion operacional del proyecto: el benchmark ext
 ![Comparacion horaria de potencia](assets/benchmark_weekly_power_comparison_v22.png)
 
 La comparacion horaria sobre una semana operativa ayuda a ver algo que una sola media no muestra: donde cada curva sigue bien la potencia real y donde pierde seguimiento frente a cambios mas bruscos.
+
+![Banda cuantílica semanal](assets/benchmark_weekly_quantile_band_v22.png)
+
+Ademas del pronostico central, el sistema entrega una banda cuantílica `q25-q75`. Eso permite representar incertidumbre operacional y no solo un valor puntual.
 
 ## Experimentos relevantes
 

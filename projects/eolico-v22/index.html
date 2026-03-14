@@ -668,7 +668,8 @@
             <strong>Pronostico operativo de 24 horas</strong>
             <p>
               El flujo toma datos abiertos, corrige el viento pronosticado y estima la potencia inyectada para las
-              24 horas siguientes desde una emision fija diaria.
+              24 horas siguientes desde una emision fija diaria. Ademas del pronostico central, entrega cuantiles
+              <code>q25/q50/q75</code> para representar incertidumbre.
             </p>
           </div>
           <div class="hero-card">
@@ -1018,6 +1019,13 @@
             directamente como siguen la curva real tanto el Coordinador como el modelo propio en operacion.
           </div>
         </div>
+        <div class="figure-card" style="margin-top: 1rem;">
+          <img src="assets/benchmark_weekly_quantile_band_v22.png" alt="Banda cuantílica q25 q75 con pronostico central y potencia real">
+          <div class="caption">
+            El sistema no entrega solo un valor central. Tambien genera una banda cuantílica <code>q25-q75</code> para
+            representar incertidumbre operacional alrededor del pronostico principal.
+          </div>
+        </div>
       </article>
 
       <article class="panel">
@@ -1269,6 +1277,16 @@
             <span class="badge">Historial reciente</span>
             <h3>Safe lags</h3>
             <p>Valores pasados de potencia o rampa que ya estaban disponibles al momento de emitir el pronostico.</p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Incertidumbre</span>
+            <h3>Forecast cuantílico</h3>
+            <p>Prediccion que entrega cuantiles como <code>q25</code>, <code>q50</code> y <code>q75</code> para representar valor central e incertidumbre.</p>
+          </div>
+          <div class="story-card">
+            <span class="badge">Calibracion</span>
+            <h3>Conformal</h3>
+            <p>Ajuste de intervalos para acercar la cobertura observada del rango cuantílico a la cobertura objetivo.</p>
           </div>
         </div>
       </article>
